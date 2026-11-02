@@ -110,7 +110,7 @@ OPTIONS = {
     "cache_max_age_hours": 24,         # if downloads fail, reuse a saved forecast up to this old
 }
 
-BUILD_VERSION = "2026-11-02d (3-hour gust window)"
+BUILD_VERSION = "2026-11-02e (artwork)"
 MODEL_NAMES = {"ukmo_seamless": "UKMO", "ecmwf_ifs025": "ECMWF", "gfs_seamless": "GFS", None: "Best match"}
 MODEL_LONG = {"ukmo_seamless": "Met Office UKMO", "ecmwf_ifs025": "ECMWF", "gfs_seamless": "NOAA GFS", None: "Open-Meteo best match"}
 
@@ -552,16 +552,22 @@ CSS = """
 :root{--bg:#f3f6f9;--card:#fff;--text:#0b1620;--muted:#41525f;--line:#d3dce4;--track:#e6edf2;--grid:rgba(11,22,32,.12);--chip:#eef3f7;
  --go:#0a7a3b;--go-bg:#d6f5e1;--warn:#8a5200;--warn-bg:#fff0bf;--stop:#b3150b;--stop-bg:#ffdcd7;
  --bar-go:#16a34a;--bar-warn:#e39b00;--bar-stop:#df3b2c;--lim:#0b1620;--accent:#0b5cad;--gold:#9a6200;--est:#5b3fa8;
- --rain:#2563eb;--stripe:rgba(255,255,255,.55)}
+ --rain:#2563eb;--stripe:rgba(255,255,255,.55);--cloud:#e7edf3;--cloud-edge:#9fb0c0;--hill:rgba(22,163,74,.16)}
 @media (prefers-color-scheme:dark){:root{--bg:#0b1622;--card:#132331;--text:#f2f7fb;--muted:#b4c4d2;--line:#2a3d4f;--track:#1d3142;--grid:rgba(242,247,251,.12);--chip:#1b2e3e;
  --go:#5ee69a;--go-bg:#103a24;--warn:#ffc94d;--warn-bg:#3d2f0b;--stop:#ff8173;--stop-bg:#45170f;
  --bar-go:#3ddc84;--bar-warn:#ffc23d;--bar-stop:#ff6a5c;--lim:#f2f7fb;--accent:#8fd3ff;--gold:#ffd27a;--est:#c9b6ff;
- --rain:#60a5fa;--stripe:rgba(11,22,34,.45)}}
+ --rain:#60a5fa;--stripe:rgba(11,22,34,.45);--cloud:#c9d6e2;--cloud-edge:#7f93a6;--hill:rgba(61,220,132,.14)}}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--text);font:17px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-variant-numeric:tabular-nums}
 main{max-width:880px;margin:0 auto;padding:12px 14px 40px}
 h1{font-size:1.5rem;margin:2px 0 0;line-height:1.15}
+.top{display:flex;align-items:center;gap:12px}
+.logo{width:52px;height:52px;flex:none;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px}
+.bart{width:150px;height:90px;flex:none}
+@media (max-width:520px){.bart{width:88px;height:53px}.banner{font-size:1rem}.banner b{font-size:1.2rem}}
+.dvis{display:inline-flex;gap:6px;vertical-align:middle;margin-left:8px}
+.dico{width:26px;height:26px;display:block}
 h2{font-size:1.25rem;margin:26px 0 8px}
 h3{font-size:1.05rem;margin:0 0 8px}
 p{margin:0}
@@ -592,7 +598,7 @@ i.mt{font-style:normal;font-size:.75em;font-weight:600;color:var(--muted);backgr
 .opts a.on{background:var(--accent);border-color:var(--accent);color:var(--card)}
 .map{width:100%;height:520px;border:0;border-radius:12px;display:block;background:var(--track)}
 @media (max-width:600px){.map{height:430px}}
-.banner{border-radius:16px;padding:14px 16px;margin:14px 0;font-size:1.1rem;font-weight:600;border:2px solid currentColor}
+.banner{border-radius:16px;padding:12px 14px 12px 16px;margin:14px 0;font-size:1.1rem;font-weight:600;border:2px solid currentColor;display:flex;align-items:center;justify-content:space-between;gap:10px}
 .banner.go{background:var(--go-bg)} .banner.stop{background:var(--stop-bg)}
 .banner b{font-size:1.35rem;display:block;color:var(--text)}
 /* Week at a glance */
@@ -683,6 +689,88 @@ details.method{background:var(--card);border:1px solid var(--line);border-radius
 footer{margin-top:18px;font-size:.85rem;color:var(--muted)}
 footer p{margin:4px 0}
 """
+
+
+
+# ===========================================================================
+# ARTWORK: small inline SVG drawings (no JavaScript, no image files)
+# ===========================================================================
+# Colours come from the page's CSS variables, so the drawings follow light and dark mode.
+SPRITE = """<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+<symbol id="ppg" viewBox="0 0 64 64">
+ <path d="M5 27 Q32 1 59 27 Q32 13 5 27Z" style="fill:var(--accent)"/>
+ <path d="M8 26 L29 47 M56 26 L35 47 M20 17 L30 46 M44 17 L34 46" style="stroke:var(--muted);stroke-width:1.3;fill:none"/>
+ <circle cx="32" cy="51" r="8" style="fill:none;stroke:var(--text);stroke-width:2.2"/>
+ <circle cx="32" cy="50" r="3.4" style="fill:var(--gold)"/>
+</symbol>
+<symbol id="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.6" style="fill:var(--gold)"/>
+ <path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" style="stroke:var(--gold);stroke-width:1.8;stroke-linecap:round"/></symbol>
+<symbol id="part" viewBox="0 0 24 24"><circle cx="9" cy="9" r="4" style="fill:var(--gold)"/>
+ <path d="M9 2.2v1.8M2.2 9h1.8M4.2 4.2l1.3 1.3M13.8 4.2l-1.3 1.3" style="stroke:var(--gold);stroke-width:1.6;stroke-linecap:round"/>
+ <path d="M7.5 20h10a3.6 3.6 0 0 0 .4-7.2A5 5 0 0 0 8.4 14 3 3 0 0 0 7.5 20Z" style="fill:var(--cloud);stroke:var(--cloud-edge);stroke-width:1"/></symbol>
+<symbol id="cloud" viewBox="0 0 24 24"><path d="M6 19h12a4.2 4.2 0 0 0 .5-8.4A6 6 0 0 0 7 11.5 3.8 3.8 0 0 0 6 19Z" style="fill:var(--cloud);stroke:var(--cloud-edge);stroke-width:1"/></symbol>
+<symbol id="rain" viewBox="0 0 24 24"><path d="M6 15h12a4 4 0 0 0 .5-8A5.8 5.8 0 0 0 7 7.8 3.6 3.6 0 0 0 6 15Z" style="fill:var(--cloud);stroke:var(--cloud-edge);stroke-width:1"/>
+ <path d="M8.5 17.5l-1 2.8M12.5 17.5l-1 2.8M16.5 17.5l-1 2.8" style="stroke:var(--rain);stroke-width:1.8;stroke-linecap:round"/></symbol>
+</defs></svg>"""
+
+FAVICON = ("data:image/svg+xml," + urllib.parse.quote(
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='#0b1622'/>"
+    "<path d='M5 27 Q32 1 59 27 Q32 13 5 27Z' fill='#8fd3ff'/><path d='M8 26 L29 47 M56 26 L35 47' stroke='#b4c4d2' stroke-width='1.6'/>"
+    "<circle cx='32' cy='51' r='8' fill='none' stroke='#f2f7fb' stroke-width='2.4'/><circle cx='32' cy='50' r='3.6' fill='#ffd27a'/></svg>"))
+
+
+def flying_art():
+    """A paramotor in flight over rolling downs, for the 'next window' banner."""
+    return """<svg class="bart" viewBox="0 0 150 90" aria-hidden="true">
+ <path d="M0 80 Q30 64 62 76 T120 70 T150 74 V90 H0Z" style="fill:var(--hill)"/>
+ <g transform="rotate(-7 82 40)">
+  <path d="M52 30 Q82 4 112 30 Q82 16 52 30Z" style="fill:var(--accent)"/>
+  <path d="M55 29 L79 53 M109 29 L85 53 M68 19 L80 52 M96 19 L84 52" style="stroke:var(--muted);stroke-width:1.2;fill:none"/>
+  <circle cx="82" cy="57" r="8" style="fill:none;stroke:var(--text);stroke-width:2.2"/>
+  <circle cx="82" cy="56" r="3.4" style="fill:var(--gold)"/>
+ </g>
+ <path d="M20 44h22M12 52h24M24 60h14" style="stroke:var(--muted);stroke-width:2;stroke-linecap:round;opacity:.5"/>
+</svg>"""
+
+
+def grounded_art():
+    """The wing packed up on the ground with gusty wind, for the 'no windows' banner."""
+    return """<svg class="bart" viewBox="0 0 150 90" aria-hidden="true">
+ <path d="M0 80 Q30 64 62 76 T120 70 T150 74 V90 H0Z" style="fill:var(--hill)"/>
+ <path d="M58 74 Q72 60 92 70 Q106 64 114 74Z" style="fill:var(--accent);opacity:.75"/>
+ <circle cx="44" cy="66" r="8" style="fill:none;stroke:var(--text);stroke-width:2.2"/>
+ <circle cx="44" cy="65" r="3.4" style="fill:var(--gold)"/>
+ <path d="M14 26q18-8 36 0t36 0M24 40q16-7 32 0t32 0M60 14q14-6 28 0" style="stroke:var(--muted);stroke-width:2.2;fill:none;stroke-linecap:round;opacity:.6"/>
+</svg>"""
+
+
+def mini_compass(direction, title):
+    """Small dial with an arrow pointing where the wind blows to."""
+    arrow = ""
+    if ok(direction):
+        arrow = (f'<g transform="rotate({(direction + 180) % 360:.0f} 12 12)"><path d="M12 5.5V17" style="stroke:var(--text);stroke-width:2;stroke-linecap:round"/>'
+                 f'<path d="M8.6 13.8L12 18.6l3.4-4.8Z" style="fill:var(--text)"/></g>')
+    return (f'<svg class="dico" viewBox="0 0 24 24" role="img" aria-label="{e(title)}"><title>{e(title)}</title>'
+            f'<circle cx="12" cy="12" r="10.2" style="fill:var(--chip);stroke:var(--line);stroke-width:1.2"/>'
+            f'<path d="M12 1.8v2.6" style="stroke:var(--accent);stroke-width:2"/>{arrow}</svg>')
+
+
+def day_visuals(d):
+    """Weather picture and wind dial for a day card."""
+    hrs = d["hours"]
+    probs = [h["prob"] for h in hrs if ok(h["prob"])]
+    clouds = [h["cloud"] for h in hrs if ok(h["cloud"])]
+    wet = any(ok(h["rain"]) and h["rain"] >= 0.1 for h in hrs) or (probs and max(probs) >= 50)
+    cl = sum(clouds) / len(clouds) if clouds else None
+    kind, word = (("rain", "Rain likely") if wet else ("cloud", "Mostly cloudy") if ok(cl) and cl >= 75
+                  else ("part", "Some cloud") if ok(cl) and cl >= 35 else ("sun", "Mostly sunny") if ok(cl) else (None, ""))
+    sx = sum((h["wind"] or 0) * math.sin(math.radians(h["dir"])) for h in hrs if ok(h["dir"]))
+    cx = sum((h["wind"] or 0) * math.cos(math.radians(h["dir"])) for h in hrs if ok(h["dir"]))
+    direction = (math.degrees(math.atan2(sx, cx)) + 360) % 360 if (sx or cx) else None
+    dir_word = f"Wind mostly from the {C16[int(round(direction / 22.5)) % 16]}" if ok(direction) else "Wind direction not available"
+    wx = (f'<svg class="dico" viewBox="0 0 24 24" role="img" aria-label="{word}"><title>{word}</title><use href="#{kind}"/></svg>'
+          if kind else "")
+    return f'<span class="dvis">{wx}{mini_compass(direction, dir_word)}</span>'
 
 
 def windy_iframe():
@@ -849,12 +937,15 @@ def page(days, info, L, built, fetched=None, stale_reason=None, no_data=False, p
 <meta http-equiv="refresh" content="{OPTIONS['page_refresh_seconds']}">
 <meta name="description" content="Paramotor flying forecast for {e(SITE['name'])}">
 <title>Membury PPG Forecast</title>
+<link rel="icon" href="{FAVICON}">
 <style>{CSS}</style>
 </head>
 <body>
+{SPRITE}
 <main>
-<h1>Membury PPG forecast</h1>
-<p class="muted small">{e(SITE['name'])}. UK local time, speeds in mph.</p>"""]
+<header class="top"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><use href="#ppg"/></svg>
+<div><h1>Membury PPG forecast</h1>
+<p class="muted small">{e(SITE['name'])}. UK local time, speeds in mph.</p></div></header>"""]
     if not no_data:
         f_l = local(fetched or built)
         P.append(f'<p class="small" style="margin-top:4px"><b>Forecast downloaded {f_l.strftime("%a")} {f_l.day} {f_l.strftime("%b, %H:%M")}</b>. '
@@ -878,10 +969,10 @@ If it doesn't appear, <a href="{e(LINKS[0][1])}" rel="noopener">open it on Windy
                 break
         if nxt:
             d, w = nxt
-            P.append(f'<div class="banner go">✔ Next flyable window for your limits<b>{day_label(d["date"], today)} {hm(w["start"])} to {hm(w["end"])}</b>'
-                     f'<span class="small">{dur(w["end"] - w["start"])}{" ☀ golden hour" if w["golden"] else ""}</span></div>')
+            P.append(f'<div class="banner go"><div>✔ Next flyable window for your limits<b>{day_label(d["date"], today)} {hm(w["start"])} to {hm(w["end"])}</b>'
+                     f'<span class="small">{dur(w["end"] - w["start"])}{" ☀ golden hour" if w["golden"] else ""}</span></div>{flying_art()}</div>')
         else:
-            P.append(f'<div class="banner stop">✖ No flyable windows for your limits<b>in the next {len(days)} days</b></div>')
+            P.append(f'<div class="banner stop"><div>✖ No flyable windows for your limits<b>in the next {len(days)} days</b></div>{grounded_art()}</div>')
 
         # Overview with model comparison
         compare = ""
@@ -920,7 +1011,7 @@ is treated as a model quirk and left out of this check. Below is how each model 
             scale = min(60, max(OPTIONS["bar_scale_min_mph"], math.ceil(max(mx_g, mx_w) / 10) * 10))
             ax = "".join(f'<span style="left:{t / scale * 100:.1f}%">{t}</span>' for t in range(0, scale + 1, 10))
             P.append(f"""<details class="day"{" open" if k == 0 else ""}>
-<summary><span class="dname">{e(label)}<span>{d['date'].day} {d['date'].strftime('%b')}</span></span><span class="badge {cls}">{icon} {word}</span>
+<summary><span class="dname">{e(label)}<span>{d['date'].day} {d['date'].strftime('%b')}</span>{day_visuals(d)}</span><span class="badge {cls}">{icon} {word}</span>
 <span class="dwin">{win}</span><span class="dstat">{stat}</span>
 <span class="open"><span class="closed">Show hours ▾</span><span class="opened">Hide hours ▴</span></span></summary>
 <div class="daybody">
