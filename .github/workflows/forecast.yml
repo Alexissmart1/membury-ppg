@@ -1,32 +1,32 @@
 # Rebuilds the forecast page every hour and publishes it on GitHub Pages.
 # Setup: repository Settings > Pages > Build and deployment > Source: "GitHub Actions".
 name: Build forecast page
- 
+
 on:
   schedule:
     - cron: "17 * * * *"   # every hour at :17 (GitHub may start a few minutes late)
   workflow_dispatch:         # lets you run it by hand from the Actions tab
   push:
     branches: [main]         # rebuild straight away when you edit build.py
- 
+
 permissions:
   contents: read
- 
+
 concurrency:
   group: pages
   cancel-in-progress: false
- 
+
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
       contents: write        # lets the history step save to the "history" branch
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       # Bring back the last good forecast, so a failed download shows a warning
       # on the page instead of leaving it silently out of date.
       - name: Restore saved forecast
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: data
           key: forecast-${{ github.run_id }}
@@ -35,11 +35,11 @@ jobs:
         run: python3 build.py --out-dir site --cache-dir data
       - name: Save forecast for next time
         if: hashFiles('data/last.json') != ''
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: data
           key: forecast-${{ github.run_id }}
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: site
       # Private test log: forecasts vs real observations, saved to the "history" branch.
@@ -63,7 +63,7 @@ jobs:
                commit --quiet -m "History update $(date -u +%Y-%m-%dT%H:%MZ)"; then
             git -C hist push --quiet origin history
           fi
- 
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -76,5 +76,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
- 
+        uses: actions/deploy-pages@v5
