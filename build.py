@@ -70,9 +70,18 @@ CHOICES = {
 
 OPTIONS = {
     "days": 7,
-    # For every hour the page uses the WORST value any model gives (highest wind, gusts, rain;
-    # lowest visibility and cloud base), so a spike in one model is never averaged away.
+    # Models downloaded. Like Windy and Windfinder, each hour's figures come from ONE lead model,
+    # with wind and gusts always taken together from it. The others are used for comparison only.
     "models": ["ukmo_seamless", "ecmwf_ifs025", "gfs_seamless"],
+    # Lead model: the Met Office model (2 km UKV over the UK) for the first hours, then ECMWF.
+    # If the lead model has no value for something, the next model in the list fills the gap.
+    "lead_short": ["ukmo_seamless", "ecmwf_ifs025", "gfs_seamless"],
+    "lead_short_hours": 48,
+    "lead_long": ["ecmwf_ifs025", "ukmo_seamless", "gfs_seamless"],
+    # A model's gust is treated as suspect (left out of the disagreement check) if it is more than
+    # this many times its own average wind AND at least gust_suspect_extra_mph above it.
+    "gust_suspect_ratio": 2.5,
+    "gust_suspect_extra_mph": 12,
     # Rain chance: share of ensemble runs with rain within an hour either side.
     # The first model that answers is used.
     "rain_ensembles": ["ecmwf_ifs025", "gfs_seamless"],
@@ -87,7 +96,7 @@ OPTIONS = {
     "disagree_wind_mph": 5,            # models disagree if their winds differ by more than this...
     "disagree_wind_frac": 0.4,         # ...or 40% of the average wind, whichever is larger
     "disagree_gust_mph": 8,            # ...or their gusts differ by more than this
-    "disagree_is_marginal": True,      # treat hours where models disagree as at least Marginal
+    "disagree_is_marginal": False,     # True = hours where models disagree are at least Marginal
     "bar_scale_min_mph": 30,           # hourly bars run from 0 to at least this speed
     "page_refresh_seconds": 1800,      # browsers reload the page this often while it is open
     "stale_hours": 3,                  # warn when the forecast is older than this
@@ -202,7 +211,7 @@ def rain_chance(ens):
 
 # ===========================================================================
 # 3. PREPARE EACH HOUR
-#    Forecast values come straight from the models (worst case, with the model named).
+#    Forecast values come straight from the lead model for each hour (named on the page).
 #    Estimated values are calculated here and are always labelled "est." on the page.
 # ===========================================================================
 TZ = ZoneInfo(SITE["tz"])
@@ -233,42 +242,58 @@ def model_values(d):
     return d
 
 
-def combine(per, prob):
-    """Turn per-model values into the hour's figures: worst case, with the model named."""
+def suspect_gust(w, g):
+    """A gust far out of line with the same model's average wind (likely a model artefact)."""
     O = OPTIONS
+    return ok(w) and ok(g) and g > O["gust_suspect_ratio"] * max(w, 1) and g - w >= O["gust_suspect_extra_mph"]
 
-    def worst(k, low=False, where=None):
-        c = [(d[k], m) for m, d in per.items() if ok(d.get(k)) and (where is None or where(d))]
-        if not c:
-            return None, None
-        return (min if low else max)(c, key=lambda x: x[0])
 
-    h = {"prob": prob}
-    h["wind"], h["wind_m"] = worst("w10")
-    h["gust"], h["gust_m"] = worst("g")
+def combine(per, prob, order):
+    """The hour's figures from ONE lead model (the first in `order` with wind data),
+    like Windy or Windfinder. Gaps are filled from the next model in `order`, and named."""
+    O = OPTIONS
+    order = [m for m in order if m in per] + [m for m in per if m not in order]
+    lead = next((m for m in order if ok(per[m].get("w10"))), order[0] if order else None)
+
+    def take(k, where=None):
+        for m in order:
+            v = per[m].get(k)
+            if ok(v) and (where is None or where(per[m])):
+                return v, m
+        return None, None
+
+    L = per.get(lead, {})
+    h = {"prob": prob, "lead": lead}
+    h["wind"], h["wind_m"] = (L.get("w10"), lead) if ok(L.get("w10")) else (None, None)
+    # Gusts always from the same model as the wind, so the two belong together
+    h["gust"], h["gust_m"] = (L.get("g"), lead) if ok(L.get("g")) else (None, None)
     if ok(h["gust"]) and ok(h["wind"]) and h["gust"] < h["wind"]:
-        h["gust"], h["gust_m"] = h["wind"], h["wind_m"]
-    h["w100"], h["w100_m"] = worst("w100")
-    h["rain"], h["rain_m"] = worst("rain")
-    h["cloud"], _ = worst("cloud")
-    h["low"], _ = worst("low")
-    vis, h["vis_m"] = worst("vis", low=True)
+        h["gust"] = h["wind"]
+    h["gust_suspect"] = suspect_gust(h["wind"], h["gust"])
+    h["w100"], h["w100_m"] = take("w100")
+    h["rain"], h["rain_m"] = take("rain")
+    h["cloud"], _ = take("cloud")
+    h["low"], _ = take("low")
+    vis, h["vis_m"] = take("vis")
     h["vis"] = vis / 1000 if ok(vis) else None
-    h["cape"], h["cape_m"] = worst("cape")
-    temps = [d["T"] for d in per.values() if ok(d["T"])]
-    h["temp"] = sum(temps) / len(temps) if temps else None
-    h["shear"], h["shear_m"] = worst("shear")
-    h["alpha"], h["alpha_m"] = worst("alpha")
-    h["base"], h["base_m"] = worst("base", low=True, where=lambda d: ok(d["low"]) and d["low"] >= O["low_cloud_pct"])
-    h["base_any"], _ = worst("base", low=True)
-    dm = per.get(h["wind_m"]) or {}
-    h["dir"] = dm.get("d10") if ok(dm.get("d10")) else next((d["d10"] for d in per.values() if ok(d["d10"])), None)
-    ws = [(m, d["w10"], d["g"]) for m, d in per.items() if ok(d["w10"])]
+    h["cape"], h["cape_m"] = take("cape")
+    h["temp"], _ = take("T")
+    # Estimates come from a single model's own 10 m and 100 m winds, never mixed
+    h["shear"], h["shear_m"] = take("shear")
+    h["alpha"], h["alpha_m"] = take("alpha")
+    h["base"], h["base_m"] = take("base", where=lambda d: ok(d["low"]) and d["low"] >= O["low_cloud_pct"])
+    if ok(h["base"]) and h["base_m"] != (take("low")[1]):
+        h["base"], h["base_m"] = None, None   # only use a cloud base from the model giving the low cloud
+    h["base_any"], _ = take("base")
+    h["dir"] = L.get("d10") if ok(L.get("d10")) else take("d10")[0]
+    # Compare the models (suspect gusts left out)
+    ws = [(m, per[m]["w10"], per[m]["g"]) for m in order if ok(per[m].get("w10"))]
     h["each"] = ws
+    h["suspects"] = [m for m, w, g in ws if suspect_gust(w, g)]
     h["disagree"] = False
     if len(ws) >= 2:
         winds = [w for _, w, _ in ws]
-        gusts = [g for _, _, g in ws if ok(g)]
+        gusts = [g for m, w, g in ws if ok(g) and m not in h["suspects"]]
         mean = sum(winds) / len(winds)
         if (max(winds) - min(winds) > max(O["disagree_wind_mph"], O["disagree_wind_frac"] * mean)
                 or (len(gusts) >= 2 and max(gusts) - min(gusts) > O["disagree_gust_mph"])):
@@ -277,13 +302,13 @@ def combine(per, prob):
     return h
 
 
-def prepare(data, models, ens):
+def prepare(data, models, ens, now):
     H = data.get("hourly") or {}
     times = H.get("time")
     if not isinstance(times, list) or not times:
         raise RuntimeError("the forecast reply had no hourly data")
     # A series that is missing, all empty, or (for some variables) a whole week of exact zeros
-    # is treated as "not supplied", so it can't skew the worst case.
+    # is treated as "not supplied".
     series, missing = {}, {}
     for var in HOURLY:
         for m in models:
@@ -313,7 +338,8 @@ def prepare(data, models, ens):
             if ok(d["w10"]):
                 used.add(m)
             per[m] = model_values(d)
-        h = combine(per, probs.get(t))
+        order = OPTIONS["lead_short"] if t < now + OPTIONS["lead_short_hours"] * 3600 else OPTIONS["lead_long"]
+        h = combine(per, probs.get(t), order if models != [None] else [None])
         h["t"], h["per"] = t, per
         hours.append(h)
     sun = {}
@@ -370,6 +396,8 @@ def rate(h, L, golden):
 
     over("Wind", h["wind"], L["max_wind"], " mph", model=h["wind_m"])
     over("Gusts", h["gust"], L["max_gust"], " mph", model=h["gust_m"])
+    if h.get("gust_suspect"):
+        C[-1]["value"] += " (unusually high for the wind; compare Windy)"
     spread = h["gust"] - h["wind"] if ok(h["gust"]) and ok(h["wind"]) else None
     over("Gust spread", spread, L["max_spread"], " mph", est=True)
     over("Wind at 100 m", h["w100"], L["max_wind_100m"], " mph", model=h["w100_m"])
@@ -412,7 +440,7 @@ def reasons(h):
 
 
 def build_days(hours, sun, now, L, model=False):
-    """model=False: the combined worst-case view. model=<id>: that model on its own."""
+    """model=False: the main view (lead model each hour). model=<id>: that model on its own."""
     days = {}
     for base in hours:
         d = local(base["t"]).date()
@@ -427,7 +455,7 @@ def build_days(hours, sun, now, L, model=False):
         else:
             if not ok(base["per"].get(model, {}).get("w10")):
                 continue
-            h = combine({model: base["per"][model]}, base["prob"])
+            h = combine({model: base["per"][model]}, base["prob"], [model])
             h["t"] = base["t"]
         h["golden"] = h["t"] < rise + g or h["t"] + 3600 > sset - g
         h["level"], h["checks"] = rate(h, L, h["golden"])
@@ -712,8 +740,9 @@ def method_html(info):
     return f"""<details class="method"><summary>How the ratings are worked out</summary>
 <h4>Forecast values</h4>
 <p>Wind, gusts, wind at 100 m, rain amount, cloud, visibility, CAPE and temperature come straight from the models via Open-Meteo.
-For each hour the page uses the worst value any model gives and names that model. A model that does not supply a value is left out
-of it, and a week of exact zeros is treated as missing.</p>
+Like Windy and Windfinder, each hour uses one lead model: the Met Office model (2 km UKV over the UK) for the next
+{O['lead_short_hours']} hours, then ECMWF, widely regarded as the most accurate global model. Wind and gusts always come from the same
+model. If the lead model doesn't supply a value, the next model fills the gap and is named. A week of exact zeros counts as missing.</p>
 <h4>Rain chance</h4>
 <p>Worked out from an ensemble: {n or 'many'} runs of the same model, each started slightly differently. The rain chance is the share of
 runs with at least {O['rain_threshold_mm']} mm of rain within an hour either side. Individual models don't provide a rain chance of their own.</p>
@@ -765,7 +794,9 @@ def hour_html(h, L, scale):
     dirtxt = C16[int(round(h["dir"] / 22.5)) % 16] if ok(h["dir"]) else "-"
     each = ""
     if h["n_models"] > 1:
-        each = " Each model (wind / gusts): " + ", ".join(f"{MODEL_NAMES[m]} {r0(w)} / {r0(g)}" for m, w, g in h["each"]) + " mph."
+        each = (f" Figures from {MODEL_NAMES.get(h['lead'], h['lead'])}. Each model (wind / gusts): "
+                + ", ".join(f"{MODEL_NAMES[m]} {r0(w)} / {r0(g)}{' (gust looks unusually high)' if m in h.get('suspects', []) else ''}"
+                            for m, w, g in h["each"]) + " mph.")
     extra = f'<p class="extra">Wind from {dirtxt}. Cloud {r0(h["cloud"])}%, {r0(h["temp"])}°C.{each}</p>'
     body = (f'<div class="hd">{verdict}<table class="checks"><thead><tr><th>Requirement</th><th>Forecast</th><th>Your limit</th><th></th></tr></thead>'
             f'<tbody>{"".join(rows)}</tbody></table>{extra}</div>')
@@ -824,11 +855,11 @@ If it doesn't appear, <a href="{e(LINKS[0][1])}" rel="noopener">open it on Windy
             grids = "".join(f'<div class="mgrid"><h4>{e(MODEL_LONG.get(m, str(m)))} on its own</h4>{glance_table(pm, today, MODEL_LONG.get(m, str(m)))}</div>'
                             for m, pm in per_model.items())
             compare = f"""<details class="compare"><summary>Why are some hours striped? Compare the models</summary>
-<p class="small">The page combines three independent weather models and, for every hour, uses the worst (windiest, wettest) of them.
-Stripes mark hours where the models disagree by more than {OPTIONS['disagree_wind_mph']} mph of wind or {OPTIONS['disagree_gust_mph']} mph of gusts.
-When that happens one model usually expects much windier weather than the others, and nobody can yet say which is right.
-This is normal several days ahead and usually settles as the day gets closer. Below is how each model on its own rates the same hours
-against your limits.</p>{grids}</details>"""
+<p class="small">Each hour's rating comes from one lead model: the Met Office model for the next {OPTIONS['lead_short_hours']} hours,
+then ECMWF. The other models are only used to check it. Stripes mark hours where the models disagree by more than
+{OPTIONS['disagree_wind_mph']} mph of wind or {OPTIONS['disagree_gust_mph']} mph of gusts, so the forecast is less certain.
+This is normal several days ahead and usually settles as the day gets closer. A gust far out of line with the same model's own wind
+is treated as a model quirk and left out of this check. Below is how each model on its own rates the same hours against your limits.</p>{grids}</details>"""
         P.append(f"""<h2>Day by day</h2>
 <div class="card"><h3>Week at a glance</h3>{glance_table(days, today, 'Week at a glance')}{legend_html()}{compare}</div>
 {howto_html(L)}""")
@@ -877,7 +908,7 @@ against your limits.</p>{grids}</details>"""
         rain_src = (f"Rain chance from {info['n_members']} ECMWF ensemble runs. " if info.get("n_members") and info.get("ens_model") == "ecmwf_ifs025"
                     else f"Rain chance from {info['n_members']} ensemble runs. " if info.get("n_members") else "Rain chance unavailable this hour. ")
         P.append(f"""<p class="small muted">Forecast from {e(', '.join(MODEL_LONG.get(m, str(m)) for m in info['models']))} via Open-Meteo,
-worst value each hour. {e(rain_src)}{e('. '.join(miss) + '. ' if miss else '')}{f'Terrain height used for this point: {elev:.0f} m.' if ok(elev) else ''}</p>""")
+lead model each hour (Met Office for {OPTIONS['lead_short_hours']} hours, then ECMWF). {e(rain_src)}{e('. '.join(miss) + '. ' if miss else '')}{f'Terrain height used for this point: {elev:.0f} m.' if ok(elev) else ''}</p>""")
 
     P.append(f"""<h2>Check before you fly</h2>
 <div class="card"><ul class="links">{''.join(f'<li><a href="{e(u)}" rel="noopener">{e(t)}</a>: {e(dd)}</li>' for t, u, dd in LINKS)}</ul></div>
@@ -954,7 +985,7 @@ def main():
             print(f"Download failed ({ex}); using the forecast saved at {hm(fetched)}", file=sys.stderr)
 
     try:
-        hours, sun, info = prepare(data, used, ens)
+        hours, sun, info = prepare(data, used, ens, built)
         info["ens_model"] = ens_model
     except Exception as ex:
         print(f"Build failed: {ex}", file=sys.stderr)
