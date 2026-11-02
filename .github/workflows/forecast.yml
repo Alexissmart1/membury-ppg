@@ -1,4 +1,5 @@
 # Rebuilds the forecast page every hour and publishes it on GitHub Pages.
+# Setup: repository Settings > Pages > Build and deployment > Source: "GitHub Actions".
 name: Build forecast page
 
 on:
@@ -20,8 +21,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build page (Python standard library only)
-        run: python3 build.py --out site/index.html
+      # Bring back the last good forecast, so a failed download shows a warning
+      # on the page instead of leaving it silently out of date.
+      - name: Restore saved forecast
+        uses: actions/cache/restore@v4
+        with:
+          path: data
+          key: forecast-${{ github.run_id }}
+          restore-keys: forecast-
+      - name: Build pages (Python standard library only)
+        run: python3 build.py --out-dir site --cache-dir data
+      - name: Save forecast for next time
+        if: hashFiles('data/last.json') != ''
+        uses: actions/cache/save@v4
+        with:
+          path: data
+          key: forecast-${{ github.run_id }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
