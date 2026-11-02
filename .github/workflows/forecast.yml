@@ -1,24 +1,26 @@
 # Rebuilds the forecast page every hour and publishes it on GitHub Pages.
 # Setup: repository Settings > Pages > Build and deployment > Source: "GitHub Actions".
 name: Build forecast page
-
+ 
 on:
   schedule:
     - cron: "17 * * * *"   # every hour at :17 (GitHub may start a few minutes late)
   workflow_dispatch:         # lets you run it by hand from the Actions tab
   push:
     branches: [main]         # rebuild straight away when you edit build.py
-
+ 
 permissions:
   contents: read
-
+ 
 concurrency:
   group: pages
   cancel-in-progress: false
-
+ 
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write        # lets the history step save to the "history" branch
     steps:
       - uses: actions/checkout@v4
       # Bring back the last good forecast, so a failed download shows a warning
@@ -40,7 +42,28 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
-
+      # Private test log: forecasts vs real observations, saved to the "history" branch.
+      # Never published on the website, and a problem here never stops the website updating.
+      - name: Update history log (not on the website)
+        if: hashFiles('data/last.json') != '' && hashFiles('history.py') != ''
+        continue-on-error: true
+        env:
+          TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          URL="https://x-access-token:${TOKEN}@github.com/${REPO}.git"
+          if git ls-remote --exit-code --heads "$URL" history >/dev/null 2>&1; then
+            git clone --quiet --depth 1 --branch history "$URL" hist
+          else
+            mkdir hist && git -C hist init --quiet -b history && git -C hist remote add origin "$URL"
+          fi
+          python3 history.py --log-dir hist --cache data/last.json
+          git -C hist add -A
+          if git -C hist -c user.name="forecast-history" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+               commit --quiet -m "History update $(date -u +%Y-%m-%dT%H:%MZ)"; then
+            git -C hist push --quiet origin history
+          fi
+ 
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -54,3 +77,4 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+ 
