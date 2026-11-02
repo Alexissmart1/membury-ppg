@@ -82,6 +82,13 @@ OPTIONS = {
     # this many times its own average wind AND at least gust_suspect_extra_mph above it.
     "gust_suspect_ratio": 2.5,
     "gust_suspect_extra_mph": 12,
+    # Some models give the strongest gust over the previous 3 hours rather than in that hour
+    # (ECMWF always; the others once their data turns 3-hourly, a couple of days ahead). For those,
+    # gusts are compared with the strongest average wind over the same 3 hours, so the gust spread
+    # isn't overstated.
+    "gust_window_models": ["ecmwf_ifs025"],
+    "gust_window_after_hours": 54,
+    "gust_window_hours": 3,
     # Rain chance: share of ensemble runs with rain within an hour either side.
     # The first model that answers is used.
     "rain_ensembles": ["ecmwf_ifs025", "gfs_seamless"],
@@ -103,7 +110,7 @@ OPTIONS = {
     "cache_max_age_hours": 24,         # if downloads fail, reuse a saved forecast up to this old
 }
 
-BUILD_VERSION = "2026-11-02c (lead model + gust safeguard)"
+BUILD_VERSION = "2026-11-02d (3-hour gust window)"
 MODEL_NAMES = {"ukmo_seamless": "UKMO", "ecmwf_ifs025": "ECMWF", "gfs_seamless": "GFS", None: "Best match"}
 MODEL_LONG = {"ukmo_seamless": "Met Office UKMO", "ecmwf_ifs025": "ECMWF", "gfs_seamless": "NOAA GFS", None: "Open-Meteo best match"}
 
@@ -274,14 +281,17 @@ def combine(per, prob, order):
     # "strongest gust in the previous 3 hours" smeared across several hours), use the highest gust
     # from the other models that look plausible, and say so on the page.
     h["gust_note"] = None
-    if suspect_gust(h["wind"], h["gust"]):
+    wref = lambda d: d.get("wref") if ok(d.get("wref")) else d.get("w10")
+    h["wref"] = wref(L) if ok(h["wind"]) else None
+    if suspect_gust(h["wref"], h["gust"]):
         others = [(per[m]["g"], m) for m in order
-                  if m != lead and ok(per[m].get("g")) and ok(per[m].get("w10")) and not suspect_gust(per[m]["w10"], per[m]["g"])]
+                  if m != lead and ok(per[m].get("g")) and ok(per[m].get("w10")) and not suspect_gust(wref(per[m]), per[m]["g"])]
         if others:
             g, gm = max(others)
             h["gust_note"] = (f"{MODEL_NAMES.get(lead, lead)} gave {r0(h['gust'])} mph, unusually high for its wind, "
                               f"so {MODEL_NAMES.get(gm, gm)}'s gust is used")
             h["gust"], h["gust_m"] = max(g, h["wind"]), gm
+            h["wref"] = wref(per[gm])
         else:
             h["gust_note"] = "unusually high for the wind; compare Windy"
     h["gust_suspect"] = h["gust_note"] is not None
@@ -304,7 +314,7 @@ def combine(per, prob, order):
     # Compare the models (suspect gusts left out)
     ws = [(m, per[m]["w10"], per[m]["g"]) for m in order if ok(per[m].get("w10"))]
     h["each"] = ws
-    h["suspects"] = [m for m, w, g in ws if suspect_gust(w, g)]
+    h["suspects"] = [m for m, w, g in ws if suspect_gust(wref(per[m]), g)]
     h["disagree"] = False
     if len(ws) >= 2:
         winds = [w for _, w, _ in ws]
@@ -352,6 +362,12 @@ def prepare(data, models, ens, now):
                 d[k] = a[i] if a is not None and i < len(a) and ok(a[i]) else None
             if ok(d["w10"]):
                 used.add(m)
+            # Reference wind for gust comparisons (see gust_window_* in OPTIONS)
+            d["wref"] = d["w10"]
+            if m in OPTIONS["gust_window_models"] or t >= now + OPTIONS["gust_window_after_hours"] * 3600:
+                a = series[("wind_speed_10m", m)]
+                win = [a[j] for j in range(max(0, i - OPTIONS["gust_window_hours"] + 1), i + 1) if a is not None and ok(a[j])]
+                d["wref"] = max(win) if win else d["w10"]
             per[m] = model_values(d)
         order = OPTIONS["lead_short"] if t < now + OPTIONS["lead_short_hours"] * 3600 else OPTIONS["lead_long"]
         h = combine(per, probs.get(t), order if models != [None] else [None])
@@ -413,7 +429,9 @@ def rate(h, L, golden):
     over("Gusts", h["gust"], L["max_gust"], " mph", model=h["gust_m"])
     if h.get("gust_note"):
         C[-1]["value"] += f" ({h['gust_note']})"
-    spread = h["gust"] - h["wind"] if ok(h["gust"]) and ok(h["wind"]) else None
+    # Gust spread: gust minus the average wind it should be compared with (see gust_window_* above)
+    base_wind = h.get("wref") if ok(h.get("wref")) else h["wind"]
+    spread = max(0.0, h["gust"] - base_wind) if ok(h["gust"]) and ok(base_wind) else None
     over("Gust spread", spread, L["max_spread"], " mph", est=True)
     over("Wind at 100 m", h["w100"], L["max_wind_100m"], " mph", model=h["w100_m"])
     over("Shear, 10 to 100 m", h["shear"], L["max_shear"], " mph", est=True, model=h["shear_m"])
@@ -762,7 +780,8 @@ model. If the lead model doesn't supply a value, the next model fills the gap an
 <p>Worked out from an ensemble: {n or 'many'} runs of the same model, each started slightly differently. The rain chance is the share of
 runs with at least {O['rain_threshold_mm']} mm of rain within an hour either side. Individual models don't provide a rain chance of their own.</p>
 <h4>Estimated values {EST}</h4>
-<p><b>Gust spread</b>: gusts minus average wind.</p>
+<p><b>Gust spread</b>: gusts minus average wind. ECMWF (and other models once their data turns 3-hourly) gives the strongest
+gust over the previous 3 hours, so for those the gust is compared with the strongest average wind over the same 3 hours.</p>
 <p><b>Wind shear</b> between 10 m and 100 m, using speed and direction: <code>√(V100² + V10² − 2·V100·V10·cos θ)</code>, where θ is the
 difference in direction. Worked out for each model; the highest is used.</p>
 <p><b>Climb gradient</b>: <code>α = ln(V100 / V10) / ln(10)</code>. Above {O['gradient_alpha']}, with at least {O['gradient_min_increase_mph']} mph more
