@@ -1,0 +1,41 @@
+# Rebuilds the forecast page every hour and publishes it on GitHub Pages.
+name: Build forecast page
+
+on:
+  schedule:
+    - cron: "17 * * * *"   # every hour at :17 (GitHub may start a few minutes late)
+  workflow_dispatch:         # lets you run it by hand from the Actions tab
+  push:
+    branches: [main]         # rebuild straight away when you edit build.py
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build page (Python standard library only)
+        run: python3 build.py --out site/index.html
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
