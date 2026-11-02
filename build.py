@@ -103,6 +103,7 @@ OPTIONS = {
     "cache_max_age_hours": 24,         # if downloads fail, reuse a saved forecast up to this old
 }
 
+BUILD_VERSION = "2026-11-02c (lead model + gust safeguard)"
 MODEL_NAMES = {"ukmo_seamless": "UKMO", "ecmwf_ifs025": "ECMWF", "gfs_seamless": "GFS", None: "Best match"}
 MODEL_LONG = {"ukmo_seamless": "Met Office UKMO", "ecmwf_ifs025": "ECMWF", "gfs_seamless": "NOAA GFS", None: "Open-Meteo best match"}
 
@@ -269,7 +270,21 @@ def combine(per, prob, order):
     h["gust"], h["gust_m"] = (L.get("g"), lead) if ok(L.get("g")) else (None, None)
     if ok(h["gust"]) and ok(h["wind"]) and h["gust"] < h["wind"]:
         h["gust"] = h["wind"]
-    h["gust_suspect"] = suspect_gust(h["wind"], h["gust"])
+    # Safeguard: if the lead model's gust is far out of line with its own wind (for example ECMWF's
+    # "strongest gust in the previous 3 hours" smeared across several hours), use the highest gust
+    # from the other models that look plausible, and say so on the page.
+    h["gust_note"] = None
+    if suspect_gust(h["wind"], h["gust"]):
+        others = [(per[m]["g"], m) for m in order
+                  if m != lead and ok(per[m].get("g")) and ok(per[m].get("w10")) and not suspect_gust(per[m]["w10"], per[m]["g"])]
+        if others:
+            g, gm = max(others)
+            h["gust_note"] = (f"{MODEL_NAMES.get(lead, lead)} gave {r0(h['gust'])} mph, unusually high for its wind, "
+                              f"so {MODEL_NAMES.get(gm, gm)}'s gust is used")
+            h["gust"], h["gust_m"] = max(g, h["wind"]), gm
+        else:
+            h["gust_note"] = "unusually high for the wind; compare Windy"
+    h["gust_suspect"] = h["gust_note"] is not None
     h["w100"], h["w100_m"] = take("w100")
     h["rain"], h["rain_m"] = take("rain")
     h["cloud"], _ = take("cloud")
@@ -396,8 +411,8 @@ def rate(h, L, golden):
 
     over("Wind", h["wind"], L["max_wind"], " mph", model=h["wind_m"])
     over("Gusts", h["gust"], L["max_gust"], " mph", model=h["gust_m"])
-    if h.get("gust_suspect"):
-        C[-1]["value"] += " (unusually high for the wind; compare Windy)"
+    if h.get("gust_note"):
+        C[-1]["value"] += f" ({h['gust_note']})"
     spread = h["gust"] - h["wind"] if ok(h["gust"]) and ok(h["wind"]) else None
     over("Gust spread", spread, L["max_spread"], " mph", est=True)
     over("Wind at 100 m", h["w100"], L["max_wind_100m"], " mph", model=h["w100_m"])
@@ -914,7 +929,8 @@ lead model each hour (Met Office for {OPTIONS['lead_short_hours']} hours, then E
 <div class="card"><ul class="links">{''.join(f'<li><a href="{e(u)}" rel="noopener">{e(t)}</a>: {e(dd)}</li>' for t, u, dd in LINKS)}</ul></div>
 {method_html(info) if days else ''}
 <footer><p>Forecast point {LAT}, {LON}. <a href="https://open-meteo.com/" rel="noopener">Weather data by Open-Meteo.com</a> (CC BY 4.0).
-Map by <a href="https://www.windy.com/" rel="noopener">Windy.com</a>. Always check conditions on site before flying.</p></footer>
+Map by <a href="https://www.windy.com/" rel="noopener">Windy.com</a>. Always check conditions on site before flying.</p>
+<p>Page version {BUILD_VERSION}.</p></footer>
 </main>
 </body>
 </html>
