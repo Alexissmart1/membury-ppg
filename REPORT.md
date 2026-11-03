@@ -1,10 +1,10 @@
 # Forecast history report
 
-Private test report, not linked from the website. Generated 2026-11-03T02:53Z. Covers the last 30 days.
+Private test report, not linked from the website. Generated 2026-11-03T10:46Z. Covers the last 30 days.
 
 **Observations:** METARs from EGVN (RAF Brize Norton, about 30 km from Membury). Forecasts are for Membury, so some difference is expected from the distance alone. METAR wind is a 10-minute average at 10 m; gusts are only reported when they are significant, otherwise the average wind is used as the gust.
 
-**Forecast rows logged:** 40. **Matched with an observation:** 4. **Observations from EGVN:** 11.
+**Forecast rows logged:** 48. **Matched with an observation:** 4. **Observations from EGVN:** 17.
 
 
 ## Average wind: forecast error by distance ahead (mph)
