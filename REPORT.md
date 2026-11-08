@@ -1,10 +1,10 @@
 # Forecast history report
 
-Private test report, not linked from the website. Generated 2026-11-07T22:42Z. Covers the last 30 days.
+Private test report, not linked from the website. Generated 2026-11-08T02:25Z. Covers the last 30 days.
 
 **Observations:** METARs from EGVN (RAF Brize Norton, about 30 km from Membury). Forecasts are for Membury, so some difference is expected from the distance alone. METAR wind is a 10-minute average at 10 m; gusts are only reported when they are significant, otherwise the average wind is used as the gust.
 
-**Forecast rows logged:** 182. **Matched with an observation:** 65. **Observations from EGVN:** 109.
+**Forecast rows logged:** 190. **Matched with an observation:** 75. **Observations from EGVN:** 114.
 
 
 ## Average wind: forecast error by distance ahead (mph)
@@ -13,12 +13,13 @@ Bias is forecast minus observed (positive = forecast too windy). MAE is the aver
 
 | Ahead | Page used (bias / MAE / n) | UKMO (bias / MAE / n) | ECMWF (bias / MAE / n) | GFS (bias / MAE / n) |
 |---|---|---|---|---|
-| 3 h | -1.0 / 1.6 / 15 | -1.0 / 1.6 / 15 | -0.7 / 1.1 / 15 | +0.9 / 1.1 / 15 |
-| 12 h | -1.1 / 1.9 / 13 | -1.1 / 1.9 / 13 | -0.1 / 0.9 / 13 | -0.0 / 1.5 / 13 |
-| 24 h | -1.4 / 1.6 / 14 | -1.4 / 1.6 / 14 | -0.8 / 0.9 / 14 | +0.3 / 1.4 / 14 |
-| 48 h | -1.7 / 2.1 / 9 | -1.9 / 3.4 / 9 | -1.7 / 2.1 / 9 | +0.0 / 1.4 / 9 |
-| 72 h | +0.8 / 1.5 / 8 | -0.1 / 1.9 / 8 | +0.8 / 1.5 / 8 | -0.4 / 2.0 / 8 |
-| 96 h | -0.9 / 0.9 / 6 | +1.9 / 1.9 / 6 | -0.9 / 0.9 / 6 | +3.0 / 3.4 / 6 |
+| 3 h | -0.8 / 1.7 / 16 | -0.8 / 1.7 / 16 | -0.6 / 1.0 / 16 | +0.9 / 1.1 / 16 |
+| 12 h | -0.8 / 2.0 / 14 | -0.8 / 2.0 / 14 | -0.1 / 0.8 / 14 | +0.0 / 1.4 / 14 |
+| 24 h | -1.1 / 1.7 / 15 | -1.1 / 1.7 / 15 | -0.7 / 0.8 / 15 | +0.2 / 1.4 / 15 |
+| 48 h | -1.5 / 2.0 / 10 | -1.6 / 3.2 / 10 | -1.5 / 2.0 / 10 | +0.2 / 1.4 / 10 |
+| 72 h | +0.7 / 1.4 / 9 | +0.2 / 2.0 / 9 | +0.7 / 1.4 / 9 | -0.1 / 2.0 / 9 |
+| 96 h | -0.9 / 0.9 / 7 | +1.6 / 1.7 / 7 | -0.9 / 0.9 / 7 | +2.9 / 3.3 / 7 |
+| 120 h | +4.1 / 4.1 / 4 | +2.7 / 2.7 / 4 | +4.1 / 4.1 / 4 | +3.7 / 3.7 / 4 |
 
 ## Gusts: forecast error by distance ahead (mph)
 
@@ -26,12 +27,13 @@ Bias is forecast minus observed (positive = forecast too windy). MAE is the aver
 
 | Ahead | Page used (bias / MAE / n) | UKMO (bias / MAE / n) | ECMWF (bias / MAE / n) | GFS (bias / MAE / n) |
 |---|---|---|---|---|
-| 3 h | +6.2 / 6.2 / 15 | +6.2 / 6.2 / 15 | +5.4 / 5.4 / 15 | +8.5 / 8.6 / 15 |
-| 12 h | +7.3 / 7.3 / 13 | +7.3 / 7.3 / 13 | +8.4 / 8.4 / 13 | +7.7 / 7.7 / 13 |
-| 24 h | +6.8 / 6.9 / 14 | +6.8 / 6.9 / 14 | +5.8 / 5.8 / 14 | +9.2 / 9.9 / 14 |
-| 48 h | +4.6 / 4.6 / 9 | +3.5 / 3.5 / 9 | +4.6 / 4.6 / 9 | +5.8 / 6.3 / 9 |
-| 72 h | +5.5 / 5.5 / 8 | +3.4 / 3.4 / 8 | +5.5 / 5.5 / 8 | +3.8 / 3.8 / 8 |
-| 96 h | +8.9 / 8.9 / 6 | +5.8 / 5.8 / 6 | +8.9 / 8.9 / 6 | +6.6 / 7.6 / 6 |
+| 3 h | +6.1 / 6.1 / 16 | +6.1 / 6.1 / 16 | +5.2 / 5.2 / 16 | +8.1 / 8.1 / 16 |
+| 12 h | +7.1 / 7.1 / 14 | +7.1 / 7.1 / 14 | +8.0 / 8.0 / 14 | +7.2 / 7.2 / 14 |
+| 24 h | +6.7 / 6.8 / 15 | +6.7 / 6.8 / 15 | +5.5 / 5.5 / 15 | +8.6 / 9.3 / 15 |
+| 48 h | +4.4 / 4.4 / 10 | +3.5 / 3.5 / 10 | +4.4 / 4.4 / 10 | +5.5 / 6.0 / 10 |
+| 72 h | +5.1 / 5.1 / 9 | +3.7 / 3.7 / 9 | +5.1 / 5.1 / 9 | +3.6 / 3.6 / 9 |
+| 96 h | +8.1 / 8.1 / 7 | +5.2 / 5.2 / 7 | +8.1 / 8.1 / 7 | +5.7 / 6.6 / 7 |
+| 120 h | +6.9 / 6.9 / 4 | +4.3 / 4.3 / 4 | +6.9 / 6.9 / 4 | +6.7 / 6.7 / 4 |
 
 ## Ratings: did the page call it right? (daylight hours, wind and gust limits only)
 
@@ -50,6 +52,7 @@ Forecast and observation are both rated against wind 10 mph, gusts 15 mph and gu
 
 | Hour (UTC) | Observed wind / gust | Page used | UKMO | ECMWF | GFS | Models disagreed |
 |---|---|---|---|---|---|---|
+| 2026-11-08T01:00Z | 2 / 2 | 4.3 / 7.6 (UKMO) | 4.3 / 7.6 | 2.1 / 3.4 | 1.4 / 1.6 |  |
 | 2026-11-07T21:00Z | 2 / 2 | 3.4 / 6.3 (UKMO) | 3.4 / 6.3 | 1.8 / 3.1 | 1.2 / 1.3 |  |
 | 2026-11-07T07:00Z | 3 / 3 | 1.3 / 2.9 (UKMO) | 1.3 / 2.9 | 2.7 / 5.6 | 0.5 / 0.7 |  |
 | 2026-11-07T00:00Z | 1 / 1 | 2.0 / 4.5 (UKMO) | 2.0 / 4.5 | 1.8 / 3.1 | 3.8 / 4.3 |  |
