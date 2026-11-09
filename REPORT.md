@@ -1,10 +1,10 @@
 # Forecast history report
 
-Private test report, not linked from the website. Generated 2026-11-08T21:07Z. Covers the last 30 days.
+Private test report, not linked from the website. Generated 2026-11-09T00:50Z. Covers the last 30 days.
 
 **Observations:** METARs from EGVN (RAF Brize Norton, about 30 km from Membury). Forecasts are for Membury, so some difference is expected from the distance alone. METAR wind is a 10-minute average at 10 m; gusts are only reported when they are significant, otherwise the average wind is used as the gust.
 
-**Forecast rows logged:** 214. **Matched with an observation:** 90. **Observations from EGVN:** 132.
+**Forecast rows logged:** 222. **Matched with an observation:** 99. **Observations from EGVN:** 137.
 
 
 ## Average wind: forecast error by distance ahead (mph)
@@ -14,12 +14,13 @@ Bias is forecast minus observed (positive = forecast too windy). MAE is the aver
 | Ahead | Page used (bias / MAE / n) | UKMO (bias / MAE / n) | ECMWF (bias / MAE / n) | GFS (bias / MAE / n) |
 |---|---|---|---|---|
 | 3 h | -0.5 / 1.6 / 18 | -0.5 / 1.6 / 18 | -0.6 / 1.0 / 18 | +0.9 / 1.3 / 18 |
-| 12 h | -0.8 / 1.8 / 16 | -0.8 / 1.8 / 16 | -0.1 / 0.8 / 16 | +0.1 / 1.3 / 16 |
-| 24 h | -0.8 / 1.6 / 18 | -0.8 / 1.6 / 18 | -0.8 / 0.9 / 18 | +0.2 / 1.2 / 18 |
+| 12 h | -0.6 / 1.8 / 17 | -0.6 / 1.8 / 17 | +0.1 / 0.9 / 17 | +0.1 / 1.3 / 17 |
+| 24 h | -0.6 / 1.7 / 19 | -0.6 / 1.7 / 19 | -0.7 / 0.9 / 19 | +0.3 / 1.2 / 19 |
 | 48 h | -1.3 / 1.8 / 13 | -1.1 / 2.7 / 13 | -1.3 / 1.8 / 13 | +0.4 / 1.3 / 13 |
-| 72 h | +0.5 / 1.2 / 11 | +0.2 / 1.7 / 11 | +0.5 / 1.2 / 11 | -0.4 / 2.0 / 11 |
-| 96 h | -0.5 / 0.9 / 9 | +1.7 / 1.7 / 9 | -0.5 / 0.9 / 9 | +2.7 / 3.0 / 9 |
-| 120 h | +3.0 / 3.5 / 5 | +2.4 / 2.4 / 5 | +3.0 / 3.5 / 5 | +3.0 / 3.0 / 5 |
+| 72 h | +0.4 / 1.2 / 12 | +0.4 / 1.8 / 12 | +0.4 / 1.2 / 12 | -0.5 / 2.0 / 12 |
+| 96 h | -0.5 / 0.9 / 10 | +2.0 / 2.0 / 10 | -0.5 / 0.9 / 10 | +2.4 / 2.7 / 10 |
+| 120 h | +2.6 / 3.0 / 6 | +1.7 / 2.2 / 6 | +2.6 / 3.0 / 6 | +2.4 / 2.7 / 6 |
+| 144 h | +3.4 / 3.4 / 4 | +7.1 / 7.1 / 4 | +3.4 / 3.4 / 4 | +4.1 / 4.1 / 4 |
 
 ## Gusts: forecast error by distance ahead (mph)
 
@@ -28,12 +29,13 @@ Bias is forecast minus observed (positive = forecast too windy). MAE is the aver
 | Ahead | Page used (bias / MAE / n) | UKMO (bias / MAE / n) | ECMWF (bias / MAE / n) | GFS (bias / MAE / n) |
 |---|---|---|---|---|
 | 3 h | +6.0 / 6.0 / 18 | +6.0 / 6.0 / 18 | +5.0 / 5.0 / 18 | +7.3 / 7.6 / 18 |
-| 12 h | +6.4 / 6.4 / 16 | +6.4 / 6.4 / 16 | +7.4 / 7.4 / 16 | +6.4 / 6.4 / 16 |
-| 24 h | +6.2 / 6.3 / 18 | +6.2 / 6.3 / 18 | +5.0 / 5.1 / 18 | +7.2 / 7.8 / 18 |
+| 12 h | +6.3 / 6.3 / 17 | +6.3 / 6.3 / 17 | +7.4 / 7.4 / 17 | +6.1 / 6.1 / 17 |
+| 24 h | +6.2 / 6.3 / 19 | +6.2 / 6.3 / 19 | +4.8 / 5.0 / 19 | +7.0 / 7.5 / 19 |
 | 48 h | +4.0 / 4.0 / 13 | +3.3 / 3.3 / 13 | +4.0 / 4.0 / 13 | +4.6 / 5.0 / 13 |
-| 72 h | +4.7 / 4.7 / 11 | +3.5 / 3.5 / 11 | +4.7 / 4.7 / 11 | +2.7 / 3.2 / 11 |
-| 96 h | +7.8 / 7.8 / 9 | +5.2 / 5.2 / 9 | +7.8 / 7.8 / 9 | +5.0 / 5.7 / 9 |
-| 120 h | +6.4 / 6.4 / 5 | +4.0 / 4.0 / 5 | +6.4 / 6.4 / 5 | +5.3 / 5.4 / 5 |
+| 72 h | +4.4 / 4.4 / 12 | +3.7 / 3.7 / 12 | +4.4 / 4.4 / 12 | +2.3 / 3.2 / 12 |
+| 96 h | +7.4 / 7.4 / 10 | +5.7 / 5.7 / 10 | +7.4 / 7.4 / 10 | +4.5 / 5.2 / 10 |
+| 120 h | +6.1 / 6.1 / 6 | +3.1 / 3.5 / 6 | +6.1 / 6.1 / 6 | +4.6 / 4.7 / 6 |
+| 144 h | +6.2 / 6.2 / 4 | +13.1 / 13.1 / 4 | +6.2 / 6.2 / 4 | +6.0 / 6.0 / 4 |
 
 ## Ratings: did the page call it right? (daylight hours, wind and gust limits only)
 
@@ -52,6 +54,7 @@ Forecast and observation are both rated against wind 10 mph, gusts 15 mph and gu
 
 | Hour (UTC) | Observed wind / gust | Page used | UKMO | ECMWF | GFS | Models disagreed |
 |---|---|---|---|---|---|---|
+| 2026-11-08T23:00Z | 1 / 1 | 4.0 / 6.7 (UKMO) | 4.0 / 6.7 | 2.9 / 3.8 | 3.0 / 2.9 |  |
 | 2026-11-08T19:00Z | 2 / 2 | 4.9 / 7.8 (UKMO) | 4.9 / 7.8 | 0.5 / 0.9 | 2.2 / 2.7 |  |
 | 2026-11-08T14:00Z | 2 / 2 | 1.8 / 4.9 (UKMO) | 1.8 / 4.9 | 1.8 / 7.2 | 2.9 / 3.8 |  |
 | 2026-11-08T08:00Z | 2 / 2 | 3.6 / 5.4 (UKMO) | 3.6 / 5.4 | 1.6 / 5.4 | 2.2 / 2.0 |  |
