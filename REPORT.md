@@ -1,10 +1,10 @@
 # Forecast history report
 
-Private test report, not linked from the website. Generated 2026-11-10T23:15Z. Covers the last 30 days.
+Private test report, not linked from the website. Generated 2026-11-11T02:47Z. Covers the last 30 days.
 
 **Observations:** METARs from EGVN (RAF Brize Norton, about 30 km from Membury). Forecasts are for Membury, so some difference is expected from the distance alone. METAR wind is a 10-minute average at 10 m; gusts are only reported when they are significant, otherwise the average wind is used as the gust.
 
-**Forecast rows logged:** 269. **Matched with an observation:** 131. **Observations from EGVN:** 172.
+**Forecast rows logged:** 277. **Matched with an observation:** 135. **Observations from EGVN:** 178.
 
 
 ## Average wind: forecast error by distance ahead (mph)
@@ -16,11 +16,11 @@ Bias is forecast minus observed (positive = forecast too windy). MAE is the aver
 | 3 h | -0.6 / 1.7 / 20 | -0.6 / 1.7 / 20 | -0.6 / 1.1 / 20 | +0.8 / 1.2 / 20 |
 | 12 h | -0.9 / 1.9 / 21 | -0.9 / 1.9 / 21 | -0.3 / 1.2 / 21 | +0.1 / 1.3 / 21 |
 | 24 h | -0.7 / 1.7 / 22 | -0.7 / 1.7 / 22 | -0.5 / 0.9 / 22 | -0.0 / 1.3 / 22 |
-| 48 h | -1.2 / 1.6 / 19 | -0.8 / 2.5 / 19 | -1.2 / 1.6 / 19 | -0.0 / 1.3 / 19 |
+| 48 h | -1.2 / 1.5 / 20 | -0.8 / 2.4 / 20 | -1.2 / 1.5 / 20 | +0.0 / 1.3 / 20 |
 | 72 h | +0.0 / 1.2 / 16 | +0.3 / 1.6 / 16 | +0.0 / 1.2 / 16 | -0.5 / 1.7 / 16 |
-| 96 h | -0.2 / 1.2 / 15 | +1.2 / 1.9 / 15 | -0.2 / 1.2 / 15 | +1.2 / 2.5 / 15 |
-| 120 h | +0.8 / 2.6 / 10 | +1.0 / 2.4 / 10 | +0.8 / 2.6 / 10 | +1.3 / 1.9 / 10 |
-| 144 h | +0.9 / 3.8 / 8 | +3.0 / 5.4 / 8 | +0.9 / 3.8 / 8 | +1.5 / 3.3 / 8 |
+| 96 h | -0.1 / 1.2 / 16 | +1.1 / 1.9 / 16 | -0.1 / 1.2 / 16 | +0.9 / 2.6 / 16 |
+| 120 h | +0.7 / 2.3 / 11 | +1.2 / 2.4 / 11 | +0.7 / 2.3 / 11 | +1.3 / 1.9 / 11 |
+| 144 h | +0.9 / 3.5 / 9 | +2.1 / 5.3 / 9 | +0.9 / 3.5 / 9 | +1.1 / 3.1 / 9 |
 
 ## Gusts: forecast error by distance ahead (mph)
 
@@ -31,11 +31,11 @@ Bias is forecast minus observed (positive = forecast too windy). MAE is the aver
 | 3 h | +6.0 / 6.0 / 20 | +6.0 / 6.0 / 20 | +4.9 / 4.9 / 20 | +7.2 / 7.5 / 20 |
 | 12 h | +6.3 / 6.3 / 21 | +6.3 / 6.3 / 21 | +6.9 / 6.9 / 21 | +6.9 / 7.2 / 21 |
 | 24 h | +6.3 / 6.3 / 22 | +6.3 / 6.3 / 22 | +5.4 / 5.5 / 22 | +7.6 / 8.1 / 22 |
-| 48 h | +4.4 / 4.4 / 19 | +4.5 / 4.5 / 19 | +4.4 / 4.4 / 19 | +5.8 / 6.1 / 19 |
+| 48 h | +4.5 / 4.5 / 20 | +4.6 / 4.6 / 20 | +4.5 / 4.5 / 20 | +6.2 / 6.4 / 20 |
 | 72 h | +4.7 / 4.7 / 16 | +4.5 / 4.5 / 16 | +4.7 / 4.7 / 16 | +4.0 / 4.9 / 16 |
-| 96 h | +7.0 / 7.0 / 15 | +6.4 / 6.4 / 15 | +7.0 / 7.0 / 15 | +6.5 / 7.0 / 15 |
-| 120 h | +7.2 / 7.2 / 10 | +5.0 / 5.2 / 10 | +7.2 / 7.2 / 10 | +7.5 / 7.7 / 10 |
-| 144 h | +6.5 / 6.5 / 8 | +9.7 / 10.5 / 8 | +6.5 / 6.5 / 8 | +6.8 / 6.8 / 8 |
+| 96 h | +7.3 / 7.3 / 16 | +6.3 / 6.3 / 16 | +7.3 / 7.3 / 16 | +6.3 / 6.7 / 16 |
+| 120 h | +7.8 / 7.8 / 11 | +5.4 / 5.6 / 11 | +7.8 / 7.8 / 11 | +8.0 / 8.2 / 11 |
+| 144 h | +7.1 / 7.1 / 9 | +8.5 / 9.4 / 9 | +7.1 / 7.1 / 9 | +7.4 / 7.4 / 9 |
 
 ## Ratings: did the page call it right? (daylight hours, wind and gust limits only)
 
