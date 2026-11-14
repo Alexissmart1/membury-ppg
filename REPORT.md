@@ -1,10 +1,10 @@
 # Forecast history report
 
-Private test report, not linked from the website. Generated 2026-11-14T10:16Z. Covers the last 30 days.
+Private test report, not linked from the website. Generated 2026-11-14T16:36Z. Covers the last 30 days.
 
 **Observations:** METARs from EGVN (RAF Brize Norton, about 30 km from Membury). Forecasts are for Membury, so some difference is expected from the distance alone. METAR wind is a 10-minute average at 10 m; gusts are only reported when they are significant, otherwise the average wind is used as the gust.
 
-**Forecast rows logged:** 364. **Matched with an observation:** 186. **Observations from EGVN:** 241.
+**Forecast rows logged:** 372. **Matched with an observation:** 189. **Observations from EGVN:** 247.
 
 
 ## Average wind: forecast error by distance ahead (mph)
@@ -13,9 +13,9 @@ Bias is forecast minus observed (positive = forecast too windy). MAE is the aver
 
 | Ahead | Page used (bias / MAE / n) | UKMO (bias / MAE / n) | ECMWF (bias / MAE / n) | GFS (bias / MAE / n) |
 |---|---|---|---|---|
-| 3 h | -0.3 / 1.7 / 24 | -0.3 / 1.7 / 24 | -0.4 / 1.1 / 24 | +0.8 / 1.3 / 24 |
-| 12 h | -0.4 / 2.0 / 27 | -0.4 / 2.0 / 27 | +0.2 / 1.4 / 27 | +0.3 / 1.4 / 27 |
-| 24 h | -0.2 / 1.9 / 29 | -0.2 / 1.9 / 29 | -0.3 / 1.0 / 29 | +0.2 / 1.5 / 29 |
+| 3 h | -0.1 / 1.9 / 25 | -0.1 / 1.9 / 25 | -0.3 / 1.2 / 25 | +1.0 / 1.5 / 25 |
+| 12 h | -0.3 / 2.0 / 28 | -0.3 / 2.0 / 28 | +0.3 / 1.5 / 28 | +0.4 / 1.5 / 28 |
+| 24 h | -0.2 / 1.8 / 30 | -0.2 / 1.8 / 30 | -0.2 / 1.1 / 30 | +0.3 / 1.5 / 30 |
 | 48 h | -0.4 / 1.6 / 28 | -0.2 / 2.5 / 28 | -0.4 / 1.6 / 28 | +0.4 / 1.5 / 28 |
 | 72 h | -0.1 / 1.7 / 22 | +0.7 / 1.9 / 22 | -0.1 / 1.7 / 22 | +0.0 / 1.6 / 22 |
 | 96 h | -0.0 / 1.8 / 23 | +0.8 / 2.2 / 23 | -0.0 / 1.8 / 23 | +0.6 / 2.5 / 23 |
@@ -28,9 +28,9 @@ Bias is forecast minus observed (positive = forecast too windy). MAE is the aver
 
 | Ahead | Page used (bias / MAE / n) | UKMO (bias / MAE / n) | ECMWF (bias / MAE / n) | GFS (bias / MAE / n) |
 |---|---|---|---|---|
-| 3 h | +6.2 / 6.2 / 24 | +6.2 / 6.2 / 24 | +5.0 / 5.0 / 24 | +6.9 / 7.1 / 24 |
-| 12 h | +6.5 / 6.5 / 27 | +6.5 / 6.5 / 27 | +6.8 / 6.8 / 27 | +6.9 / 7.1 / 27 |
-| 24 h | +6.6 / 6.7 / 29 | +6.6 / 6.7 / 29 | +5.3 / 5.4 / 29 | +7.7 / 8.0 / 29 |
+| 3 h | +6.5 / 6.5 / 25 | +6.5 / 6.5 / 25 | +5.2 / 5.2 / 25 | +7.1 / 7.3 / 25 |
+| 12 h | +6.6 / 6.6 / 28 | +6.6 / 6.6 / 28 | +7.1 / 7.1 / 28 | +7.0 / 7.2 / 28 |
+| 24 h | +6.6 / 6.7 / 30 | +6.6 / 6.7 / 30 | +5.4 / 5.5 / 30 | +7.7 / 8.1 / 30 |
 | 48 h | +5.2 / 5.2 / 28 | +5.3 / 5.3 / 28 | +5.2 / 5.2 / 28 | +6.9 / 7.1 / 28 |
 | 72 h | +4.9 / 4.9 / 22 | +5.3 / 5.3 / 22 | +4.9 / 4.9 / 22 | +6.0 / 6.7 / 22 |
 | 96 h | +7.9 / 7.9 / 23 | +6.1 / 6.2 / 23 | +9.0 / 9.0 / 23 | +7.0 / 7.4 / 23 |
@@ -43,8 +43,8 @@ Forecast and observation are both rated against wind 10 mph, gusts 15 mph and gu
 
 | Ahead | Hours | Same rating | Missed danger | Missed chance |
 |---|---|---|---|---|
-| 3 h | 2 | 100% | 0 (0%) | 0 (0%) |
-| 12 h | 14 | 64% | 0 (0%) | 2 (14%) |
+| 3 h | 3 | 67% | 0 (0%) | 1 (33%) |
+| 12 h | 15 | 60% | 0 (0%) | 3 (20%) |
 | 24 h | 8 | 100% | 0 (0%) | 0 (0%) |
 | 48 h | 8 | 38% | 0 (0%) | 3 (38%) |
 | 72 h | 6 | 33% | 0 (0%) | 2 (33%) |
@@ -56,6 +56,7 @@ Forecast and observation are both rated against wind 10 mph, gusts 15 mph and gu
 
 | Hour (UTC) | Observed wind / gust | Page used | UKMO | ECMWF | GFS | Models disagreed |
 |---|---|---|---|---|---|---|
+| 2026-11-14T16:00Z | 5 / 5 | 5.8 / 11.4 (UKMO) | 5.8 / 11.4 | 6.9 / 13.4 | 7.4 / 13.4 |  |
 | 2026-11-14T07:00Z | 2 / 2 | 5.6 / 8.7 (UKMO) | 5.6 / 8.7 | 5.8 / 9.4 | 4.9 / 4.5 |  |
 | 2026-11-14T00:00Z | 0 / 0 | 5.1 / 8.3 (UKMO) | 5.1 / 8.3 | 1.3 / 2.0 | 2.5 / 2.2 |  |
 | 2026-11-13T19:00Z | 2 / 2 | 4.7 / 7.4 (UKMO) | 4.7 / 7.4 | 4.1 / 6.5 | 2.2 / 2.2 |  |
