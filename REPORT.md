@@ -1,10 +1,10 @@
 # Forecast history report
 
-Private test report, not linked from the website. Generated 2026-11-15T01:51Z. Covers the last 30 days.
+Private test report, not linked from the website. Generated 2026-11-15T09:19Z. Covers the last 30 days.
 
 **Observations:** METARs from EGVN (RAF Brize Norton, about 30 km from Membury). Forecasts are for Membury, so some difference is expected from the distance alone. METAR wind is a 10-minute average at 10 m; gusts are only reported when they are significant, otherwise the average wind is used as the gust.
 
-**Forecast rows logged:** 388. **Matched with an observation:** 201. **Observations from EGVN:** 258.
+**Forecast rows logged:** 396. **Matched with an observation:** 204. **Observations from EGVN:** 264.
 
 
 ## Average wind: forecast error by distance ahead (mph)
@@ -16,11 +16,11 @@ Bias is forecast minus observed (positive = forecast too windy). MAE is the aver
 | 3 h | +0.3 / 2.1 / 27 | +0.3 / 2.1 / 27 | +0.1 / 1.4 / 27 | +1.2 / 1.6 / 27 |
 | 12 h | -0.2 / 2.0 / 29 | -0.2 / 2.0 / 29 | +0.4 / 1.5 / 29 | +0.4 / 1.5 / 29 |
 | 24 h | -0.0 / 1.9 / 31 | -0.0 / 1.9 / 31 | -0.1 / 1.2 / 31 | +0.4 / 1.6 / 31 |
-| 48 h | -0.1 / 1.8 / 30 | +0.1 / 2.6 / 30 | -0.1 / 1.8 / 30 | +0.7 / 1.7 / 30 |
-| 72 h | +0.1 / 1.8 / 23 | +0.8 / 1.9 / 23 | +0.1 / 1.8 / 23 | +0.2 / 1.7 / 23 |
+| 48 h | +0.2 / 2.1 / 31 | +0.3 / 2.8 / 31 | +0.2 / 2.1 / 31 | +1.0 / 2.0 / 31 |
+| 72 h | +0.2 / 1.8 / 24 | +0.9 / 2.0 / 24 | +0.2 / 1.8 / 24 | +0.4 / 1.9 / 24 |
 | 96 h | +0.0 / 1.7 / 24 | +0.9 / 2.2 / 24 | +0.0 / 1.7 / 24 | +0.6 / 2.4 / 24 |
 | 120 h | +1.1 / 2.8 / 18 | +2.2 / 2.9 / 18 | +1.1 / 2.8 / 18 | +1.9 / 2.4 / 18 |
-| 144 h | +1.8 / 4.2 / 19 | +2.8 / 5.0 / 19 | +1.8 / 4.2 / 19 | +2.4 / 4.1 / 19 |
+| 144 h | +1.9 / 4.2 / 20 | +3.0 / 5.2 / 20 | +1.9 / 4.2 / 20 | +2.5 / 4.1 / 20 |
 
 ## Gusts: forecast error by distance ahead (mph)
 
@@ -31,11 +31,11 @@ Bias is forecast minus observed (positive = forecast too windy). MAE is the aver
 | 3 h | +6.8 / 6.8 / 27 | +6.8 / 6.8 / 27 | +5.5 / 5.5 / 27 | +7.4 / 7.6 / 27 |
 | 12 h | +6.7 / 6.7 / 29 | +6.7 / 6.7 / 29 | +7.2 / 7.2 / 29 | +7.0 / 7.2 / 29 |
 | 24 h | +6.9 / 6.9 / 31 | +6.9 / 6.9 / 31 | +5.6 / 5.7 / 31 | +7.9 / 8.3 / 31 |
-| 48 h | +5.5 / 5.5 / 30 | +5.6 / 5.6 / 30 | +5.5 / 5.5 / 30 | +7.8 / 8.0 / 30 |
-| 72 h | +5.1 / 5.1 / 23 | +5.5 / 5.5 / 23 | +5.1 / 5.1 / 23 | +6.1 / 6.7 / 23 |
+| 48 h | +6.1 / 6.1 / 31 | +5.9 / 5.9 / 31 | +6.1 / 6.1 / 31 | +8.5 / 8.7 / 31 |
+| 72 h | +5.2 / 5.2 / 24 | +5.6 / 5.6 / 24 | +5.2 / 5.2 / 24 | +6.2 / 6.8 / 24 |
 | 96 h | +8.0 / 8.0 / 24 | +6.0 / 6.1 / 24 | +9.1 / 9.1 / 24 | +6.7 / 7.1 / 24 |
 | 120 h | +8.3 / 8.3 / 18 | +6.9 / 7.1 / 18 | +8.9 / 8.9 / 18 | +9.7 / 9.8 / 18 |
-| 144 h | +10.3 / 10.3 / 19 | +9.4 / 9.9 / 19 | +10.3 / 10.3 / 19 | +9.4 / 9.4 / 19 |
+| 144 h | +10.3 / 10.3 / 20 | +9.7 / 10.1 / 20 | +10.3 / 10.3 / 20 | +9.8 / 9.8 / 20 |
 
 ## Ratings: did the page call it right? (daylight hours, wind and gust limits only)
 
@@ -46,11 +46,11 @@ Forecast and observation are both rated against wind 10 mph, gusts 15 mph and gu
 | 3 h | 3 | 67% | 0 (0%) | 1 (33%) |
 | 12 h | 15 | 60% | 0 (0%) | 3 (20%) |
 | 24 h | 8 | 100% | 0 (0%) | 0 (0%) |
-| 48 h | 8 | 38% | 0 (0%) | 3 (38%) |
+| 48 h | 9 | 33% | 0 (0%) | 4 (44%) |
 | 72 h | 6 | 33% | 0 (0%) | 2 (33%) |
 | 96 h | 7 | 43% | 0 (0%) | 3 (43%) |
 | 120 h | 4 | 50% | 0 (0%) | 2 (50%) |
-| 144 h | 6 | 50% | 0 (0%) | 2 (33%) |
+| 144 h | 7 | 43% | 0 (0%) | 3 (43%) |
 
 ## Recent hours, forecast made about a day ahead (mph)
 
