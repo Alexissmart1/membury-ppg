@@ -1,10 +1,10 @@
 # Forecast history report
 
-Private test report, not linked from the website. Generated 2026-11-18T12:58Z. Covers the last 30 days.
+Private test report, not linked from the website. Generated 2026-11-18T21:23Z. Covers the last 30 days.
 
 **Observations:** METARs from EGVN (RAF Brize Norton, about 30 km from Membury). Forecasts are for Membury, so some difference is expected from the distance alone. METAR wind is a 10-minute average at 10 m; gusts are only reported when they are significant, otherwise the average wind is used as the gust.
 
-**Forecast rows logged:** 460. **Matched with an observation:** 253. **Observations from EGVN:** 325.
+**Forecast rows logged:** 468. **Matched with an observation:** 254. **Observations from EGVN:** 331.
 
 
 ## Average wind: forecast error by distance ahead (mph)
@@ -20,7 +20,7 @@ Bias is forecast minus observed (positive = forecast too windy). MAE is the aver
 | 72 h | +1.5 / 2.8 / 32 | +2.3 / 3.1 / 31 | +1.6 / 2.8 / 31 | +2.7 / 3.8 / 31 |
 | 96 h | +1.8 / 3.1 / 31 | +1.4 / 2.6 / 31 | +1.8 / 3.1 / 31 | +2.5 / 3.9 / 31 |
 | 120 h | +0.6 / 3.0 / 23 | +1.1 / 3.1 / 23 | +0.6 / 3.0 / 23 | +2.9 / 3.3 / 23 |
-| 144 h | +3.1 / 4.8 / 28 | +3.2 / 5.0 / 28 | +3.1 / 4.8 / 28 | +5.7 / 6.8 / 28 |
+| 144 h | +3.0 / 4.7 / 29 | +3.1 / 4.9 / 29 | +3.0 / 4.7 / 29 | +5.6 / 6.7 / 29 |
 
 ## Gusts: forecast error by distance ahead (mph)
 
@@ -35,7 +35,7 @@ Bias is forecast minus observed (positive = forecast too windy). MAE is the aver
 | 72 h | +7.7 / 7.7 / 32 | +7.8 / 7.8 / 31 | +7.7 / 7.7 / 31 | +10.5 / 11.0 / 31 |
 | 96 h | +10.1 / 10.1 / 31 | +6.7 / 6.8 / 31 | +10.9 / 10.9 / 31 | +10.9 / 11.2 / 31 |
 | 120 h | +10.1 / 10.1 / 23 | +5.3 / 6.7 / 23 | +10.2 / 10.2 / 23 | +11.1 / 11.1 / 23 |
-| 144 h | +13.2 / 13.2 / 28 | +9.8 / 10.1 / 28 | +13.3 / 13.3 / 28 | +14.6 / 14.6 / 28 |
+| 144 h | +13.1 / 13.1 / 29 | +9.6 / 9.9 / 29 | +13.2 / 13.2 / 29 | +14.5 / 14.5 / 29 |
 
 ## Ratings: did the page call it right? (daylight hours, wind and gust limits only)
 
