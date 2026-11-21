@@ -1,10 +1,10 @@
 # Forecast history report
 
-Private test report, not linked from the website. Generated 2026-11-20T20:06Z. Covers the last 30 days.
+Private test report, not linked from the website. Generated 2026-11-21T01:28Z. Covers the last 30 days.
 
 **Observations:** METARs from EGVN (RAF Brize Norton, about 30 km from Membury). Forecasts are for Membury, so some difference is expected from the distance alone. METAR wind is a 10-minute average at 10 m; gusts are only reported when they are significant, otherwise the average wind is used as the gust.
 
-**Forecast rows logged:** 516. **Matched with an observation:** 280. **Observations from EGVN:** 365.
+**Forecast rows logged:** 524. **Matched with an observation:** 282. **Observations from EGVN:** 371.
 
 
 ## Average wind: forecast error by distance ahead (mph)
@@ -13,8 +13,8 @@ Bias is forecast minus observed (positive = forecast too windy). MAE is the aver
 
 | Ahead | Page used (bias / MAE / n) | UKMO (bias / MAE / n) | ECMWF (bias / MAE / n) | GFS (bias / MAE / n) |
 |---|---|---|---|---|
-| 3 h | +0.9 / 2.4 / 32 | +0.9 / 2.4 / 32 | +0.9 / 2.1 / 32 | +2.2 / 2.6 / 32 |
-| 12 h | +0.8 / 2.6 / 38 | +0.7 / 2.5 / 37 | +1.2 / 2.1 / 37 | +1.7 / 2.6 / 37 |
+| 3 h | +1.0 / 2.4 / 33 | +1.0 / 2.4 / 33 | +1.0 / 2.1 / 33 | +2.2 / 2.6 / 33 |
+| 12 h | +0.9 / 2.6 / 39 | +0.8 / 2.5 / 38 | +1.2 / 2.1 / 38 | +1.7 / 2.6 / 38 |
 | 24 h | +0.9 / 2.5 / 39 | +0.8 / 2.4 / 38 | +0.9 / 1.9 / 38 | +1.9 / 2.9 / 38 |
 | 48 h | +1.3 / 2.8 / 39 | +1.3 / 3.3 / 38 | +1.3 / 2.8 / 38 | +2.4 / 3.2 / 38 |
 | 72 h | +1.6 / 2.7 / 34 | +2.2 / 3.0 / 33 | +1.6 / 2.8 / 33 | +2.5 / 3.6 / 33 |
@@ -28,8 +28,8 @@ Bias is forecast minus observed (positive = forecast too windy). MAE is the aver
 
 | Ahead | Page used (bias / MAE / n) | UKMO (bias / MAE / n) | ECMWF (bias / MAE / n) | GFS (bias / MAE / n) |
 |---|---|---|---|---|
-| 3 h | +7.5 / 7.5 / 32 | +7.5 / 7.5 / 32 | +6.8 / 6.8 / 32 | +8.9 / 9.1 / 32 |
-| 12 h | +8.1 / 8.1 / 38 | +7.8 / 7.8 / 37 | +8.3 / 8.3 / 37 | +8.8 / 8.9 / 37 |
+| 3 h | +7.5 / 7.5 / 33 | +7.5 / 7.5 / 33 | +6.7 / 6.7 / 33 | +8.7 / 8.9 / 33 |
+| 12 h | +8.0 / 8.0 / 39 | +7.7 / 7.7 / 38 | +8.2 / 8.2 / 38 | +8.6 / 8.7 / 38 |
 | 24 h | +8.1 / 8.1 / 39 | +8.0 / 8.0 / 38 | +7.0 / 7.1 / 38 | +10.5 / 10.8 / 38 |
 | 48 h | +7.9 / 7.9 / 39 | +7.6 / 7.6 / 38 | +8.0 / 8.0 / 38 | +11.1 / 11.3 / 38 |
 | 72 h | +7.8 / 7.8 / 34 | +7.6 / 7.6 / 33 | +7.8 / 7.8 / 33 | +10.0 / 10.4 / 33 |
