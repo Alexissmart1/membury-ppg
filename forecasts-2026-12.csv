@@ -1,2 +1,3 @@
 logged_utc,logged_at,target_utc,target_time,lead_bucket_h,lead_h,daylight,used_model,used_wind,used_gust,used_level,gust_replaced,rain_chance,disagree,ukmo_wind,ukmo_gust,ecmwf_wind,ecmwf_gust,gfs_wind,gfs_gust
 2026-11-25T00:38Z,1795567128,2026-12-01T01:00Z,1796086800,144,144.35,0,ECMWF,11.5,22.4,2,0,37,0,10.5,18.3,11.5,22.4,10.9,26.2
+2026-11-25T09:48Z,1795600101,2026-12-01T10:00Z,1796119200,144,144.19,1,ECMWF,16.2,26.4,2,0,39,0,12.5,21.9,16.2,26.4,13.3,27.7
